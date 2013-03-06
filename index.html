@@ -15,14 +15,22 @@ $(function () {
 	
 var modal = new $.Modal({
 	el: '#modal-trigger1',
-	width: 600,
-	action: {
-		initComplete: function () {},
+	cache: true,
+	boxClassName: 'modal-box',
+	boxBodyClassName: 'modal-body',
+	bgClassName: 'modal-bg',
+	//innerLinkSelector: null,
+	dismissClassName: 'dismiss',
+	bodyEl: document.body,
+	action: { // "this" context is modal object
+		initComplete: function () { },
 		renderComplete: function () { },
-		scrollStart: function () { },
-		scrollEnd: function () { },
-		firstSlide: function () { },
-		lastSlide: function () { }
+		openComplete: function () {
+			//this.$box.addClass('show');
+		},
+		closeComplete: function () {
+			//this.$box.removeClass('show');
+		}
 	}
 });
 
@@ -48,9 +56,10 @@ var modal = new $.Modal({
 <!--/.main--></div>
 <!--/.container--></div>
 
-<div class="modal-box show" id="modal1">
+<div class="modal-box" id="modal1">
 <div class="modal-body">
-Modal content in existing hidden element
+<h1>Modal content1</h1>
+<p>Modal content in existing hidden element</p>
 <!--/.modal-body--></div>
 <a href="#" class="dismiss" data-modal-dismiss="modal1">&#215;</a>
 <!--/.modal-box--></div>
