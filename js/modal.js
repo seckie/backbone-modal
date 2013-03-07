@@ -68,15 +68,15 @@ $.Modal = Backbone.View.extend({
 	_setupEvents: function () {
 		var opt = this.options;
 		$(document).on('keydown.modal', this._keyHandler);
-		$(document).on('click.modal', '.' + opt.dismissClassName, this._close);
-		$(document).on('click.modal', '.' + opt.bgClassName, this._close);
+		$(document).on('click.modal', '.' + opt.dismissClassName, this.close);
+		$(document).on('click.modal', '.' + opt.bgClassName, this.close);
 //        $(document).on('click.modal', opt.innerLinkSelector, this._openInside);
 	},
 	// close modal with Esc key
 	_keyHandler: function (e) {
 		var key = e.keyCode || e.charCode;
 		if (key === 27) {
-			this._close();
+			this.close();
 		}
 	},
 	open: function () { // public function
@@ -103,7 +103,7 @@ $.Modal = Backbone.View.extend({
 			this.action.openComplete.call(this); // action
 		}
 	},
-	_close: function (e) {
+	close: function () { // public function
 		var opt = this.options;
 		this.$boxBody.hide();
 		this.$el.hide();
