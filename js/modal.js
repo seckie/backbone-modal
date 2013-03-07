@@ -10,10 +10,12 @@
 (function($, _, Backbone, window, document) {
 
 $.Modal = Backbone.View.extend({
+	id: null,
 	options: {
 //        animateDuration: 750,
 //        animateEasing: 'swing',
 //        width: null,
+		url: null,
 		cache: true,
 		boxClassName: 'modal-box',
 		boxBodyClassName: 'modal-body',
@@ -34,31 +36,23 @@ $.Modal = Backbone.View.extend({
 		 * </div>
 		 */
 		var opt = this.options;
-		var id, url;
 		_.extend(this.options, options);
 		_.extend(this.action, opt.action);
 		// element - bg
-//        this.$bg = $('.' + opt.bgClassName);
-//        if (typeof this.$bg[0] != 'object') {
-			this.$bg = new Backbone.View({
-				className: opt.bgClassName
-			}).$el;
-			this.$bg.appendTo(document.body);
-//        }
+		this.$bg = new Backbone.View({
+			className: opt.bgClassName
+		}).$el;
+		this.$bg.appendTo(document.body);
 		// element - box
-		id = this.$el.data('modal-id');
-		url = this.$el.data('modal-url');
 		this.$box;
-
-		if (typeof id === 'string') { // id mode
-			this.$box = $('#' + id).hide();
+		if (typeof this.id === 'string') { // id mode
+			this.$box = $('#' + this.id).hide();
 			this.$boxBody = this.$box.find('.' + opt.boxBodyClassName);
 			this.$dismiss = this.$box.find('.' + opt.dismissClassName);
-		} else if (!this.$box && typeof url === 'string') { // url mode
+		} else if (!this.$box && typeof opt.url === 'string') { // url mode
 			this.$box = new Backbone.View({
 				className: opt.boxClassName
 			}).$el;
-			this.url = this.$el.data('modal-url'); 
 			this.$boxBody = $('<div/>', { 'class': opt.boxBodyClassName }).appendTo(this.$box);
 			this.$dismiss = $('<a/>', { 'class': opt.dismissClassName, href: '#', html: '&#215;' }).appendTo(this.$box);
 			this.$box.hide().appendTo(document.body);
@@ -103,8 +97,8 @@ $.Modal = Backbone.View.extend({
 //                'margin-left': ''
 //            });
 //        }
-		if (typeof this.url === 'string') {
-			$.ajax(this.url, {
+		if (typeof opt.url === 'string') {
+			$.ajax(opt.url, {
 				cache: opt.cache,
 				dataType: 'html',
 				success: _.bind(fire, this)
@@ -127,15 +121,6 @@ $.Modal = Backbone.View.extend({
 		e.preventDefault();
 	},
 	_close: function (e) {
-		/**
-		 * <div $body>
-		 *   <div $box>
-		 *     <div $boxBody> </div>
-		 *   </div>
-		 *   <div $bg> </div>
-		 *   <button $dismiss></button>
-		 * </div>
-		 */
 		var opt = this.options;
 		this.$boxBody.hide();
 		this.$box.hide();

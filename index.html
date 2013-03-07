@@ -13,8 +13,9 @@
 <script>
 $(function () {
 	
-var modal = new $.Modal({
+var modal1 = new $.Modal({
 	el: '#modal-trigger1',
+	id: 'modal1',
 	cache: true,
 	boxClassName: 'modal-box',
 	boxBodyClassName: 'modal-body',
@@ -34,8 +35,9 @@ var modal = new $.Modal({
 	}
 });
 
-var modal = new $.Modal({
+var modal2 = new $.Modal({
 	el: '#modal-trigger2',
+	url: 'modal2.html'
 });
 });
 </script>
@@ -49,7 +51,7 @@ var modal = new $.Modal({
 <p><a href="https://github.com/seckie/Backbone-View-Modal">source on github</a></p>
 
 <ul>
-	<li><a href="#" id="modal-trigger1" data-modal-id="modal1">Open modal box from existing hidden element</a></li>
+	<li><a href="#" id="modal-trigger1">Open modal box from existing hidden element</a></li>
 	<li><a href="#" id="modal-trigger2" data-modal-url="modal2.html">Open modal from URL</a></li>
 </ul>
 	
