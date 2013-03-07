@@ -1,7 +1,7 @@
-# Backbone-View-Modal
+# backbone-modal
 
 Modal widget on Backbone.View
 
 See demo:
 
-- http://seckie.github.com/Backbone-View-Modal/
+- http://seckie.github.com/backbone-modal/
