@@ -14,10 +14,8 @@
 $(function () {
 	
 var modal1 = new $.Modal({
-	el: '#modal-trigger1',
-	id: 'modal1',
+	id: 'modal1', // id mode
 	cache: true,
-	boxClassName: 'modal-box',
 	boxBodyClassName: 'modal-body',
 	bgClassName: 'modal-bg',
 	//innerLinkSelector: null,
@@ -36,9 +34,21 @@ var modal1 = new $.Modal({
 });
 
 var modal2 = new $.Modal({
-	el: '#modal-trigger2',
-	url: 'modal2.html'
+	url: 'modal2.html' // url mode
 });
+
+$('#modal-trigger1').on('click', function (e) {
+	modal1.open();
+	e.preventDefault();
+});
+$('#modal-trigger2').on('click', function (e) {
+	modal2.open();
+	e.preventDefault();
+});
+
+
+
+
 });
 </script>
 </head>
@@ -52,7 +62,7 @@ var modal2 = new $.Modal({
 
 <ul>
 	<li><a href="#" id="modal-trigger1">Open modal box from existing hidden element</a></li>
-	<li><a href="#" id="modal-trigger2" data-modal-url="modal2.html">Open modal from URL</a></li>
+	<li><a href="#" id="modal-trigger2">Open modal from URL</a></li>
 </ul>
 	
 <!--/.main--></div>

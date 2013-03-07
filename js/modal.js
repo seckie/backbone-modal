@@ -11,6 +11,8 @@
 
 $.Modal = Backbone.View.extend({
 	id: null,
+	tagName: 'div',
+	className: 'modal-box',
 	options: {
 //        animateDuration: 750,
 //        animateEasing: 'swing',
@@ -44,18 +46,18 @@ $.Modal = Backbone.View.extend({
 		}).$el;
 		this.$bg.appendTo(document.body);
 		// element - box
-		this.$box;
 		if (typeof this.id === 'string') { // id mode
-			this.$box = $('#' + this.id).hide();
-			this.$boxBody = this.$box.find('.' + opt.boxBodyClassName);
-			this.$dismiss = this.$box.find('.' + opt.dismissClassName);
-		} else if (!this.$box && typeof opt.url === 'string') { // url mode
-			this.$box = new Backbone.View({
-				className: opt.boxClassName
+			this.$el = $('#' + this.id).hide();
+			this.$boxBody = this.$el.find('.' + opt.boxBodyClassName);
+			this.$dismiss = this.$el.find('.' + opt.dismissClassName);
+		} else if (typeof opt.url === 'string') { // url mode
+			this.$el = new Backbone.View({
+				tagName: this.tagName,
+				className: this.className
 			}).$el;
-			this.$boxBody = $('<div/>', { 'class': opt.boxBodyClassName }).appendTo(this.$box);
-			this.$dismiss = $('<a/>', { 'class': opt.dismissClassName, href: '#', html: '&#215;' }).appendTo(this.$box);
-			this.$box.hide().appendTo(document.body);
+			this.$boxBody = $('<div/>', { 'class': opt.boxBodyClassName }).appendTo(this.$el);
+			this.$dismiss = $('<a/>', { 'class': opt.dismissClassName, href: '#', html: '&#215;' }).appendTo(this.$el);
+			this.$el.hide().appendTo(document.body);
 		}
 		this.$body = $(opt.bodyEl);
 
@@ -66,9 +68,6 @@ $.Modal = Backbone.View.extend({
 	},
 	render: function () {
 		this.action.renderComplete.call(this); // action
-	},
-	events: {
-		'click.modal': '_open'
 	},
 	_setupEvents: function () {
 		var opt = this.options;
@@ -84,15 +83,15 @@ $.Modal = Backbone.View.extend({
 			this._close();
 		}
 	},
-	_open: function (e) {
+	open: function () { // public function
 		var opt = this.options;
 //        if (opt.width) {
-//            this.$box.css({
+//            this.$el.css({
 //                'width': opt.width,
 //                'margin-left': Math.floor(opt.width / 2) * -1
 //            });
 //        } else {
-//            this.$box.css({
+//            this.$el.css({
 //                'width': '',
 //                'margin-left': ''
 //            });
@@ -118,12 +117,11 @@ $.Modal = Backbone.View.extend({
 			this._showBoxBody();
 			this.action.openComplete.call(this); // action
 		}
-		e.preventDefault();
 	},
 	_close: function (e) {
 		var opt = this.options;
 		this.$boxBody.hide();
-		this.$box.hide();
+		this.$el.hide();
 		$(window).scrollTop(this.initialScrollTop);
 //        if (this.isIE7) {
 //            this.$bg.hide();
@@ -135,7 +133,7 @@ $.Modal = Backbone.View.extend({
 	_initBox: function () {
 		var winH = $(window).height(),
 			bodyH = this.$body.outerHeight(),
-			boxH = this.$box.outerHeight(), 
+			boxH = this.$el.outerHeight(), 
 			scrollTop = $(window).scrollTop(),
 			posTop;
 		if (winH < scrollTop && bodyH < scrollTop) {
@@ -145,14 +143,14 @@ $.Modal = Backbone.View.extend({
 			this.initialScrollTop = scrollTop;
 		}
 
-		if (this.$box.outerHeight() < winH) {
+		if (this.$el.outerHeight() < winH) {
 			// small box height
 			posTop = this.initialScrollTop + Math.floor((winH - boxH) / 2);
 		} else {
 			// large box height
 			posTop = this.initialScrollTop;
 		}
-		this.$box.css({
+		this.$el.css({
 			'top': posTop
 		}).show();
 		this.$boxBody.hide();
@@ -180,22 +178,22 @@ $.Modal = Backbone.View.extend({
 	_getBgWidth: function () {
 		var winW = $(window).width(),
 			bodyW = this.$body.outerWidth(),
-			contentW = this.$box.outerWidth();
+			contentW = this.$el.outerWidth();
 		return _.max([winW, bodyW, contentW]);
 	},
 	_getBgHeight: function () {
 		var winH = $(window).height(),
 			bodyH = this.$body.outerHeight(),
-			contentH = this.$box.outerHeight() + $(window).scrollTop();
+			contentH = this.$el.outerHeight() + $(window).scrollTop();
 		return _.max([winH, bodyH, contentH]);
 	},
-	_openInside: function (e) {//{{{
+	_openInside: function (e) {
 		var url = e.currentTarget;
 		var opt = this.options;
 		$.ajax(url, {
 			cache: opt.cache,
 			success: _.bind(function () {
-				this.$box.height(this.$box.height()); // fix height
+				this.$el.height(this.$el.height()); // fix height
 				this.$boxBody.hide();
 				this._adjustBgSize();
 				this._initBox();
@@ -207,11 +205,11 @@ $.Modal = Backbone.View.extend({
 //                } else {
 					this.$boxBody.fadeIn();
 //                }
-				this.$box.css('height', ''); // reset height
+				this.$el.css('height', ''); // reset height
 			}, this)
 		});
 		e.preventDefault();
-	},//}}}
+	},
 
 	// interface functions that should be overridden
 	action: {
