@@ -14,12 +14,8 @@ $.Modal = Backbone.View.extend({
 	tagName: 'div',
 	className: 'modal-box',
 	options: {
-//        animateDuration: 750,
-//        animateEasing: 'swing',
-//        width: null,
 		url: null,
 		cache: true,
-		boxClassName: 'modal-box',
 		boxBodyClassName: 'modal-body',
 		bgClassName: 'modal-bg',
 		innerLinkSelector: null,
@@ -85,17 +81,6 @@ $.Modal = Backbone.View.extend({
 	},
 	open: function () { // public function
 		var opt = this.options;
-//        if (opt.width) {
-//            this.$el.css({
-//                'width': opt.width,
-//                'margin-left': Math.floor(opt.width / 2) * -1
-//            });
-//        } else {
-//            this.$el.css({
-//                'width': '',
-//                'margin-left': ''
-//            });
-//        }
 		if (typeof opt.url === 'string') {
 			$.ajax(opt.url, {
 				cache: opt.cache,
@@ -123,12 +108,7 @@ $.Modal = Backbone.View.extend({
 		this.$boxBody.hide();
 		this.$el.hide();
 		$(window).scrollTop(this.initialScrollTop);
-//        if (this.isIE7) {
-//            this.$bg.hide();
-//            this.closeCallback();
-//        } else {
-			this.$bg.fadeOut(_.bind(this.action.closeComplete, this)/* action */);
-//        }
+		this.$bg.fadeOut(_.bind(this.action.closeComplete, this)/* action */);
 	},
 	_initBox: function () {
 		var winH = $(window).height(),
@@ -166,11 +146,7 @@ $.Modal = Backbone.View.extend({
 	},
 	_showBg: function () {
 		this._adjustBgSize();
-//        if (this.isIE7) {
-//            this.$bg.show();
-//        } else {
-			this.$bg.fadeIn();
-//        }
+		this.$bg.fadeIn();
 	},
 	_adjustBgSize: function () {
 		this.$bg.width(this._getBgWidth()).height(this._getBgHeight());
@@ -200,11 +176,7 @@ $.Modal = Backbone.View.extend({
 				$(window).scrollTop(this.initialScrollTop);
 				this._showBoxBody();
 				// fadeIn effect
-//                if (this.isIE7) {
-//                    this.inner.show();
-//                } else {
-					this.$boxBody.fadeIn();
-//                }
+				this.$boxBody.fadeIn();
 				this.$el.css('height', ''); // reset height
 			}, this)
 		});
