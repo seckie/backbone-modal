@@ -20,6 +20,7 @@ $hoverlinkcolor: #66ccff;
 
 html {
 	height: 100%;
+	overflow-y: scroll;
 }
 body {
 	height: 100%;
@@ -60,8 +61,7 @@ a {
 	top: 50%;
 	left: 50%;
 	width: 600px;
-//     height: 0;
-height: 400px;
+	min-height: 400px;
 	overflow: hidden;
 	background-color: #fff;
 	margin: 0 0 0 -300px;
@@ -70,9 +70,9 @@ height: 400px;
 	@include transition-property(height, transform);
 	@include transition-duration(1s);
 	&.show {
-		height: 400px;
-		margin-top: -200px;
-		@include transform(skew(0));
+//         height: 400px;
+//         margin-top: -200px;
+//         @include transform(skew(0));
 	}
 	.dismiss {
 		display: block;

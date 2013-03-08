@@ -82,7 +82,8 @@ $.Modal = Backbone.View.extend({
 		}
 	},
 	open: function () { // public function
-		var opt = this.options;
+		var self = this,
+			opt = this.options;
 		if (typeof opt.url === 'string') {
 			$.ajax(opt.url, {
 				cache: opt.cache,
@@ -99,24 +100,26 @@ $.Modal = Backbone.View.extend({
 				body = body.replace(/<body[^>]*>\n?/, '');
 				this.$boxBody.html(body);
 			}
-			this._initBox();
+			this._initBox().done(function () {
+				self._showBoxBody();
+				self.action.openComplete.call(self); // action
+			});
 			this._showBg();
-			this._showBoxBody();
-			this.action.openComplete.call(this); // action
 		}
 	},
 	close: function () { // public function
 		var opt = this.options;
-		this.$boxBody.hide();
+		this._hideBoxBody();
 		this.$el.hide();
 		$(window).scrollTop(this.initialScrollTop);
 		this.$bg.fadeOut(_.bind(this.action.closeComplete, this)/* action */);
 	},
-	_initBox: function () {
+	_initBox: function (transition) {
 		var winH = $(window).height(),
 			bodyH = this.$body.outerHeight(),
 			boxH = this.$el.outerHeight(), 
 			scrollTop = $(window).scrollTop(),
+			dfd = $.Deferred(),
 			posTop;
 		if (winH < scrollTop && bodyH < scrollTop) {
 			// prevent too much increase of height
@@ -132,19 +135,32 @@ $.Modal = Backbone.View.extend({
 			// large box height
 			posTop = this.initialScrollTop;
 		}
-		this.$el.css({
-			'top': posTop
-		}).show();
-		this.$boxBody.hide();
-//        this.$boxBody.css({
-//            'visibility': 'hidden'
-//        });
+		if (transition) {
+			this.$el.show().animate({
+				'top': posTop
+			}, dfd.resolve);
+		} else {
+			this.$el.css({
+				'top': posTop
+			}).show();
+			dfd.resolve();
+		}
+		this._hideBoxBody();
+		return dfd.promise();
+	},
+	_hideBoxBody: function () {
+		this.$boxBody.css({
+			'visibility': 'hidden',
+			'opacity': 0
+		});
 	},
 	_showBoxBody: function () {
-		this.$boxBody.fadeIn();
-//        this.$boxBody.css({
-//            'visibility': 'visible'
-//        });
+		this.$boxBody.css({
+			'visibility': 'visible',
+			'opacity': 0
+		}).animate({
+			'opacity': 1
+		});
 	},
 	_showBg: function () {
 		this._adjustBgSize();
@@ -166,24 +182,26 @@ $.Modal = Backbone.View.extend({
 		return _.max([winH, bodyH, contentH]);
 	},
 	_openInside: function (e) {
+		var self = this;
 		var url = e.currentTarget.href;
 		var opt = this.options;
 		$.ajax(url, {
 			cache: opt.cache,
 			dataType: 'html',
 			success: _.bind(function (res) {
-				this.$el.height(this.$el.height()); // fix height
+//                this.$el.height(this.$el.height()); // fix height
 				if (res) {
 					var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
 					body = body.replace(/<body[^>]*>\n?/, '');
-					this.$boxBody.hide().html(body);
+					this.$boxBody.css('visibility', 'hidden').html(body);
 				}
 				this._adjustBgSize();
-				this._initBox();
+				this._initBox(1).done(function () {
+					self._showBoxBody();
+				});
 				$(window).scrollTop(this.initialScrollTop);
-				this._showBoxBody();
 //                this.$boxBody.fadeIn();
-				this.$el.css('height', ''); // reset height
+//                this.$el.css('height', ''); // reset height
 			}, this)
 		});
 		e.preventDefault();
