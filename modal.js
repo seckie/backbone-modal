@@ -189,7 +189,6 @@ $.Modal = Backbone.View.extend({
 			cache: opt.cache,
 			dataType: 'html',
 			success: _.bind(function (res) {
-//                this.$el.height(this.$el.height()); // fix height
 				if (res) {
 					var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
 					body = body.replace(/<body[^>]*>\n?/, '');
@@ -200,8 +199,6 @@ $.Modal = Backbone.View.extend({
 					self._showBoxBody();
 				});
 				$(window).scrollTop(this.initialScrollTop);
-//                this.$boxBody.fadeIn();
-//                this.$el.css('height', ''); // reset height
 			}, this)
 		});
 		e.preventDefault();
