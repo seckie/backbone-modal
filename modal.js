@@ -35,6 +35,15 @@ $.Modal = Backbone.View.extend({
 		 */
 		var opt = this.options;
 		_.extend(this.options, options);
+		// interface functions that should be overridden
+		this.action = {
+			initComplete: function () {},
+			renderComplete: function () {},
+			openStart: function () {},
+			openComplete: function () {},
+			closeStart: function () {},
+			closeComplete: function () {}
+		};
 		_.extend(this.action, opt.action);
 		// element - bg
 		this.$bg = new Backbone.View({
@@ -67,23 +76,24 @@ $.Modal = Backbone.View.extend({
 	},
 	_setupEvents: function () {
 		var opt = this.options;
-		$(document).on('keydown.modal', this._keyHandler);
-		$(document).on('click.modal', '.' + opt.dismissClassName, this.close);
-		$(document).on('click.modal', '.' + opt.bgClassName, this.close);
+		this.$bg.on('click.' + this.cid, this.close);
+		this.$el.on('click.' + this.cid, '.' + opt.dismissClassName, this.close);
 		if (typeof opt.innerLinkSelector === 'string') {
-			$(document).on('click.modal', opt.innerLinkSelector, this._openInside);
+			$(document).on('click.' + this.cid, opt.innerLinkSelector, this._openInside);
 		}
 	},
 	// close modal with Esc key
 	_keyHandler: function (e) {
 		var key = e.keyCode || e.charCode;
 		if (key === 27) {
-			this.close();
+			this.close(e);
 		}
 	},
 	open: function () { // public function
 		var self = this,
 			opt = this.options;
+		this.action.openStart.call(this); // action
+		$(document).on('keydown.' + this.cid, this._keyHandler); // add key event
 		if (typeof opt.url === 'string') {
 			$.ajax(opt.url, {
 				cache: opt.cache,
@@ -107,8 +117,10 @@ $.Modal = Backbone.View.extend({
 			this._showBg();
 		}
 	},
-	close: function () { // public function
+	close: function (e) { // public function
 		var opt = this.options;
+		this.action.closeStart.call(this); // action
+		$(document).off('keydown.' + this.cid); // remove key event
 		this._hideBoxBody();
 		this.$el.hide();
 		$(window).scrollTop(this.initialScrollTop);
@@ -202,14 +214,6 @@ $.Modal = Backbone.View.extend({
 			}, this)
 		});
 		e.preventDefault();
-	},
-
-	// interface functions that should be overridden
-	action: {
-		initComplete: function () { },
-		renderComplete: function () { },
-		openComplete: function () {},
-		closeComplete: function () {}
 	}
 });
 
