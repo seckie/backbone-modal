@@ -18,7 +18,7 @@ $.Modal = Backbone.View.extend({
 		cache: true,
 		boxBodyClassName: 'modal-body',
 		bgClassName: 'modal-bg',
-		innerLinkSelector: null,
+		innerLinkEl: null,
 		dismissClassName: 'dismiss',
 		bodyEl: document.body,
 		action: { }
@@ -78,8 +78,8 @@ $.Modal = Backbone.View.extend({
 		var opt = this.options;
 		this.$bg.on('click.' + this.cid, this.close);
 		this.$el.on('click.' + this.cid, '.' + opt.dismissClassName, this.close);
-		if (typeof opt.innerLinkSelector === 'string') {
-			$(document).on('click.' + this.cid, opt.innerLinkSelector, this._openInside);
+		if (typeof opt.innerLinkEl === 'string') {
+			$(document).on('click.' + this.cid, opt.innerLinkEl, this._openInside);
 		}
 	},
 	// close modal with Esc key
