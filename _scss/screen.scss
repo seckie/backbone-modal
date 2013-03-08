@@ -89,6 +89,28 @@ height: 400px;
 		line-height: 20px;
 	}
 }
+.innerlink {
+	position: absolute;
+	top: 50%;
+	display: block;
+	width: 40px;
+	height: 40px;
+	margin-top: -20px;
+	background-color: #666;
+	color: #fff;
+	text-align: center;
+	text-decoration: none;
+	line-height: 40px;
+	&:hover, &:focus, &:active {
+		background-color: #999;
+	}
+	&.prev {
+		left: 0;
+	}
+	&.next {
+		right: 0;
+	}
+}
 .modal-bg {
 	position: absolute;
 	z-index: 98;

@@ -70,7 +70,9 @@ $.Modal = Backbone.View.extend({
 		$(document).on('keydown.modal', this._keyHandler);
 		$(document).on('click.modal', '.' + opt.dismissClassName, this.close);
 		$(document).on('click.modal', '.' + opt.bgClassName, this.close);
-//        $(document).on('click.modal', opt.innerLinkSelector, this._openInside);
+		if (typeof opt.innerLinkSelector === 'string') {
+			$(document).on('click.modal', opt.innerLinkSelector, this._openInside);
+		}
 	},
 	// close modal with Esc key
 	_keyHandler: function (e) {
@@ -164,21 +166,37 @@ $.Modal = Backbone.View.extend({
 		return _.max([winH, bodyH, contentH]);
 	},
 	_openInside: function (e) {
-		var url = e.currentTarget;
+		var url = e.currentTarget.href;
 		var opt = this.options;
 		$.ajax(url, {
 			cache: opt.cache,
-			success: _.bind(function () {
+			dataType: 'html',
+			success: _.bind(function (res) {
 				this.$el.height(this.$el.height()); // fix height
-				this.$boxBody.hide();
+				if (res) {
+					var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
+					body = body.replace(/<body[^>]*>\n?/, '');
+					this.$boxBody.hide().html(body);
+				}
 				this._adjustBgSize();
 				this._initBox();
 				$(window).scrollTop(this.initialScrollTop);
 				this._showBoxBody();
-				// fadeIn effect
-				this.$boxBody.fadeIn();
+//                this.$boxBody.fadeIn();
 				this.$el.css('height', ''); // reset height
 			}, this)
+		/*
+		function fire (res) {
+			if (res) {
+				var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
+				body = body.replace(/<body[^>]*>\n?/, '');
+				this.$boxBody.html(body);
+			}
+			this._initBox();
+			this._showBg();
+			this._showBoxBody();
+			this.action.openComplete.call(this); // action
+			*/
 		});
 		e.preventDefault();
 	},

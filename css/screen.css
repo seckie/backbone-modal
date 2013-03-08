@@ -36,4 +36,9 @@ a { color: #3399ff; }
 .modal-box.show { height: 400px; margin-top: -200px; -webkit-transform: skew(0); -moz-transform: skew(0); -ms-transform: skew(0); -o-transform: skew(0); transform: skew(0); }
 .modal-box .dismiss { display: block; position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; text-align: center; text-decoration: none; background: #3399ff; color: #fff; font-size: 20px; line-height: 20px; }
 
+.innerlink { position: absolute; top: 50%; display: block; width: 40px; height: 40px; margin-top: -20px; background-color: #666; color: #fff; text-align: center; text-decoration: none; line-height: 40px; }
+.innerlink:hover, .innerlink:focus, .innerlink:active { background-color: #999; }
+.innerlink.prev { left: 0; }
+.innerlink.next { right: 0; }
+
 .modal-bg { position: absolute; z-index: 98; top: 0; left: 0; min-height: 100%; background-color: #000; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
