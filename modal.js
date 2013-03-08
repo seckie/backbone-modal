@@ -185,18 +185,6 @@ $.Modal = Backbone.View.extend({
 //                this.$boxBody.fadeIn();
 				this.$el.css('height', ''); // reset height
 			}, this)
-		/*
-		function fire (res) {
-			if (res) {
-				var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
-				body = body.replace(/<body[^>]*>\n?/, '');
-				this.$boxBody.html(body);
-			}
-			this._initBox();
-			this._showBg();
-			this._showBoxBody();
-			this.action.openComplete.call(this); // action
-			*/
 		});
 		e.preventDefault();
 	},
