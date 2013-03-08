@@ -54,7 +54,10 @@ $('#modal-trigger2').on('click', function (e) {
 	e.preventDefault();
 }).click();
 
-
+$('#modal-trigger3').on('click', function (e) {
+	modal2.open(this.href);
+	e.preventDefault();
+});
 
 
 });
@@ -71,7 +74,7 @@ $('#modal-trigger2').on('click', function (e) {
 <ul>
 	<li><a href="#" id="modal-trigger1">Open modal box from existing hidden element</a></li>
 	<li><a href="#" id="modal-trigger2">Open modal from URL</a></li>
-</ul>
+	<li><a href="modal4.html" id="modal-trigger3">Open modal from specific URL</a></li></ul>
 	
 <!--/.main--></div>
 <!--/.container--></div>

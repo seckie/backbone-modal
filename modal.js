@@ -89,18 +89,19 @@ $.Modal = Backbone.View.extend({
 			this.close(e);
 		}
 	},
-	open: function () { // public function
+	open: function (url) { // public function
 		var self = this,
-			opt = this.options;
+			opt = this.options,
+			url = url || opt.url;
 		this.action.openStart.call(this); // action
 		$(document).on('keydown.' + this.cid, this._keyHandler); // add key event
-		if (typeof opt.url === 'string') {
-			$.ajax(opt.url, {
+		if (typeof url === 'string') { // open via URL
+			$.ajax(url, {
 				cache: opt.cache,
 				dataType: 'html',
 				success: _.bind(fire, this)
 			});
-		} else {
+		} else { // open via id
 			fire.call(this);
 		}
 
