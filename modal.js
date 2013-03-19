@@ -128,6 +128,7 @@ $.Modal = Backbone.View.extend({
 		this.$el.hide();
 		$(window).scrollTop(this.initialScrollTop);
 		this.$bg.fadeOut(_.bind(this.action.closeComplete, this)/* action */);
+		e.preventDefault();
 	},
 	_initBox: function (transition) {
 		var winH = $(window).height(),
