@@ -41,6 +41,8 @@ $.Modal = Backbone.View.extend({
 			renderComplete: function () {},
 			openStart: function () {},
 			openComplete: function () {},
+			openInsideStart: function () {},
+			openInsideComplete: function () {},
 			closeStart: function () {},
 			closeComplete: function () {}
 		};
@@ -198,6 +200,7 @@ $.Modal = Backbone.View.extend({
 		var self = this;
 		var url = e.currentTarget.href;
 		var opt = this.options;
+		this.action.openInsideStart.call(this); // action
 		$.ajax(url, {
 			cache: opt.cache,
 			dataType: 'html',
@@ -210,6 +213,7 @@ $.Modal = Backbone.View.extend({
 				this._adjustBgSize();
 				this._initBox(1).done(function () {
 					self._showBoxBody();
+					self.action.openInsideComplete.call(self); // action
 				});
 				$(window).scrollTop(this.initialScrollTop);
 			}, this)

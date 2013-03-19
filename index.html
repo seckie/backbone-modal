@@ -36,6 +36,14 @@ var modal2 = new $.Modal({
 		openComplete: function () {
 			//this.$box.addClass('show');
 		},
+		openInsideStart: function () {
+			//this.$box.addClass('show');
+			console.log('open inside started');
+		},
+		openInsideComplete: function () {
+			//this.$box.removeClass('show');
+			console.log('open inside complete');
+		},
 		closeStart: function () {
 			console.log('close started');
 		},
