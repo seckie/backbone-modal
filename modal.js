@@ -161,21 +161,16 @@ $.Modal = Backbone.View.extend({
 			}).show();
 			dfd.resolve();
 		}
-		this._hideBoxBody();
 		return dfd.promise();
 	},
 	_hideBoxBody: function () {
 		this.$boxBody.css({
-			'visibility': 'hidden',
-			'opacity': 0
+			'visibility': 'hidden'
 		});
 	},
 	_showBoxBody: function () {
 		this.$boxBody.css({
-			'visibility': 'visible',
-			'opacity': 0
-		}).animate({
-			'opacity': 1
+			'visibility': 'visible'
 		});
 	},
 	_showBg: function () {
