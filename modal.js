@@ -68,7 +68,7 @@ $.Modal = Backbone.View.extend({
 		}
 		this.$body = $(opt.bodyEl);
 
-		_.bindAll(this);
+		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', '_initBox', '_hideBoxBody', '_showBoxBody', '_showBg', '_adjustBgSize', '_getBgWidth', '_getBgHeight', '_openInside');
 		this._setupEvents();
 		this.action.initComplete.call(this); // action
 		this.render();
