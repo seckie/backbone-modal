@@ -22,6 +22,7 @@ $.Modal = Backbone.View.extend({
 		dismissClassName: 'dismiss',
 		bodyEl: document.body,
 		fadeDuration: 750,
+		resumeScrollPosition: true,
 		action: { }
 	},
 	initialize: function (options) {
@@ -127,7 +128,9 @@ $.Modal = Backbone.View.extend({
 		$(document).off('keydown.' + this.cid); // remove key event
 		this._hideBoxBody();
 		this.$el.hide();
-		$(window).scrollTop(this.initialScrollTop);
+		if (opt.resumeScrollPosition) {
+			$(window).scrollTop(this.initialScrollTop);
+		}
 		if (this.options.fadeDuration > 0) {
 			this.$bg.fadeOut(opt.fadeDuration, _.bind(this.action.closeComplete, this)/* action */);
 		} else {
@@ -148,7 +151,7 @@ $.Modal = Backbone.View.extend({
 		if (winH < scrollTop && bodyH < scrollTop) {
 			// prevent too much increase of height
 		} else {
-			// save scrll position
+			// save scroll position
 			this.initialScrollTop = scrollTop;
 		}
 
@@ -223,7 +226,9 @@ $.Modal = Backbone.View.extend({
 					self._showBoxBody();
 					self.action.openInsideComplete.call(self); // action
 				});
-				$(window).scrollTop(this.initialScrollTop);
+				if (opt.resumeScrollPosition) {
+					$(window).scrollTop(this.initialScrollTop);
+				}
 			}, this)
 		});
 		if (e) {
