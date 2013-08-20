@@ -20,6 +20,7 @@ var modal1 = new $.Modal({
 	bgClassName: 'modal-bg',
 	dismissClassName: 'dismiss',
 	bodyEl: document.body,
+	fadeDuration: 0,
 	action: { // "this" context is modal object
 	}
 });
@@ -90,7 +91,7 @@ $('#modal-trigger3').on('click', function (e) {
 <div class="modal-box" id="modal1">
 <div class="modal-body">
 <h1>Modal content1</h1>
-<p>Modal content in existing hidden element</p>
+<p>Modal content in existing hidden element with no fading.</p>
 <!--/.modal-body--></div>
 <a href="#" class="dismiss" data-modal-dismiss="modal1">&#215;</a>
 <!--/.modal-box--></div>

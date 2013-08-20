@@ -21,6 +21,7 @@ $.Modal = Backbone.View.extend({
 		innerLinkEl: null,
 		dismissClassName: 'dismiss',
 		bodyEl: document.body,
+		fadeDuration: 750,
 		action: { }
 	},
 	initialize: function (options) {
@@ -127,7 +128,12 @@ $.Modal = Backbone.View.extend({
 		this._hideBoxBody();
 		this.$el.hide();
 		$(window).scrollTop(this.initialScrollTop);
-		this.$bg.fadeOut(_.bind(this.action.closeComplete, this)/* action */);
+		if (this.options.fadeDuration > 0) {
+			this.$bg.fadeOut(opt.fadeDuration, _.bind(this.action.closeComplete, this)/* action */);
+		} else {
+			this.$bg.hide();
+			this.action.closeComplete.call(this);/* action */
+		}
 		if (e) {
 			e.preventDefault();
 		}
@@ -177,7 +183,11 @@ $.Modal = Backbone.View.extend({
 	},
 	_showBg: function () {
 		this._adjustBgSize();
-		this.$bg.fadeIn();
+		if (this.options.fadeDuration > 0) {
+			this.$bg.fadeIn(this.options.fadeDuration);
+		} else {
+			this.$bg.show();
+		}
 	},
 	_adjustBgSize: function () {
 		this.$bg.width(this._getBgWidth()).height(this._getBgHeight());
