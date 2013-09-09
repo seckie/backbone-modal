@@ -22,6 +22,7 @@ $.Modal = Backbone.View.extend({
 		dismissClassName: 'dismiss',
 		bodyEl: document.body,
 		fadeDuration: 750,
+		bg: true,
 		resumeScrollPosition: true,
 		action: { }
 	},
@@ -50,10 +51,12 @@ $.Modal = Backbone.View.extend({
 		};
 		_.extend(this.action, opt.action);
 		// element - bg
-		this.$bg = new Backbone.View({
-			className: opt.bgClassName
-		}).$el;
-		this.$bg.appendTo(document.body);
+		if (this.options.bg) {
+			this.$bg = new Backbone.View({
+				className: opt.bgClassName
+			}).$el;
+			this.$bg.appendTo(document.body);
+		}
 		// element - box
 		if (typeof this.id === 'string') { // id mode
 			this.$el = $('#' + this.id).hide();
@@ -80,7 +83,9 @@ $.Modal = Backbone.View.extend({
 	},
 	_setupEvents: function () {
 		var opt = this.options;
-		this.$bg.on('click.' + this.cid, this.close);
+		if (this.$bg) {
+			this.$bg.on('click.' + this.cid, this.close);
+		}
 		this.$el.on('click.' + this.cid, '.' + opt.dismissClassName, this.close);
 		if (typeof opt.innerLinkEl === 'string') {
 			$(document).on('click.' + this.cid, opt.innerLinkEl, this._openInside);
@@ -119,7 +124,9 @@ $.Modal = Backbone.View.extend({
 				self._showBoxBody();
 				self.action.openComplete.call(self); // action
 			});
-			this._showBg();
+			if (this.$bg) {
+				this._showBg();
+			}
 		}
 	},
 	close: function (e) { // public function
@@ -132,9 +139,13 @@ $.Modal = Backbone.View.extend({
 			$(window).scrollTop(this.initialScrollTop);
 		}
 		if (this.options.fadeDuration > 0) {
-			this.$bg.fadeOut(opt.fadeDuration, _.bind(this.action.closeComplete, this)/* action */);
+			if (this.$bg) {
+				this.$bg.fadeOut(opt.fadeDuration, _.bind(this.action.closeComplete, this)/* action */);
+			}
 		} else {
-			this.$bg.hide();
+			if (this.$bg) {
+				this.$bg.hide();
+			}
 			this.action.closeComplete.call(this);/* action */
 		}
 		if (e) {
@@ -221,7 +232,9 @@ $.Modal = Backbone.View.extend({
 					body = body.replace(/<body[^>]*>\n?/, '');
 					this.$boxBody.css('visibility', 'hidden').html(body);
 				}
-				this._adjustBgSize();
+				if (this.$bg) {
+					this._adjustBgSize();
+				}
 				this._initBox(1).done(function () {
 					self._showBoxBody();
 					self.action.openInsideComplete.call(self); // action
