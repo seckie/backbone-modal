@@ -101,21 +101,29 @@ $.Modal = Backbone.View.extend({
 	open: function (url) { // public function
 		var self = this,
 			opt = this.options,
-			url = url || opt.url;
-		this.action.openStart.call(this); // action
-		$(document).on('keydown.' + this.cid, this._keyHandler); // add key event
-		if (typeof url === 'string') { // open via URL
-			$.ajax(url, {
-				cache: opt.cache,
-				dataType: 'html',
-				success: _.bind(fire, this)
-			});
-		} else { // open via id
-			fire.call(this);
+			url = url || opt.url,
+			startCallback = this.action.openStart.call(this); // action
+		if (typeof startCallback.promise === 'function') {
+			startCallback.done(_.bind(main, this));
+		} else {
+			main.call(this);
 		}
 
-		function fire (res) {
-			if (res) {
+		function main () {
+			$(document).on('keydown.' + this.cid, this._keyHandler); // add key event
+			if (typeof url === 'string') { // open via URL
+				$.ajax(url, {
+					cache: opt.cache,
+					dataType: 'html',
+					success: _.bind(openModal, this)
+				});
+			} else { // open via id
+				openModal.call(this);
+			}
+		}
+
+		function openModal (res) {
+			if (res) { // open via URL
 				var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
 				body = body.replace(/<body[^>]*>\n?/, '');
 				this.$boxBody.html(body);
@@ -124,32 +132,40 @@ $.Modal = Backbone.View.extend({
 				self._showBoxBody();
 				self.action.openComplete.call(self); // action
 			});
-			if (this.$bg) {
+			if (this.$bg) { // if 'bg' option is TRUE
 				this._showBg();
 			}
 		}
 	},
 	close: function (e) { // public function
-		var opt = this.options;
-		this.action.closeStart.call(this); // action
-		$(document).off('keydown.' + this.cid); // remove key event
-		this._hideBoxBody();
-		this.$el.hide();
-		if (opt.resumeScrollPosition) {
-			$(window).scrollTop(this.initialScrollTop);
-		}
-		if (this.options.fadeDuration > 0) {
-			if (this.$bg) {
-				this.$bg.fadeOut(opt.fadeDuration, _.bind(this.action.closeComplete, this)/* action */);
-			}
+		var opt = this.options,
+			startCallback = this.action.closeStart.call(this); // action
+		if (typeof startCallback.promise === 'function') {
+			startCallback.done(_.bind(main, this));
 		} else {
-			if (this.$bg) {
-				this.$bg.hide();
-			}
-			this.action.closeComplete.call(this);/* action */
+			main.call(this);
 		}
 		if (e) {
 			e.preventDefault();
+		}
+
+		function main () {
+			$(document).off('keydown.' + this.cid); // remove key event
+			this._hideBoxBody();
+			this.$el.hide();
+			if (opt.resumeScrollPosition) {
+				$(window).scrollTop(this.initialScrollTop);
+			}
+			if (this.options.fadeDuration > 0) {
+				if (this.$bg) {
+					this.$bg.fadeOut(opt.fadeDuration, _.bind(this.action.closeComplete, this)/* action */);
+				}
+			} else {
+				if (this.$bg) {
+					this.$bg.hide();
+				}
+				this.action.closeComplete.call(this);/* action */
+			}
 		}
 	},
 	_initBox: function (transition) {
