@@ -1,0 +1,26 @@
+{
+  "name": "backbone-modal",
+  "version": "0.1.0",
+  "description": "Modal widget on Backbone.View",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seckie/backbone-modal.git"
+  },
+  "author": "Naoki Sekiguchi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seckie/backbone-modal/issues"
+  },
+  "homepage": "https://github.com/seckie/backbone-modal",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-compass": "~0.7.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-jshint": "~0.8.0"
+  }
+}
