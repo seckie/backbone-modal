@@ -1,7 +1,7 @@
 /**
  * $.Modal
  *
- * @author     Naoki Sekiguchi (RaNa gRam)
+ * @author     Naoki Sekiguchi
  * @url        https://github.com/seckie/backbone-modal
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @requires   jQuery.js, Underscore.js, Backbone.js
