@@ -97,9 +97,10 @@ a {
 		line-height: 20px;
 	}
 }
-.innerlink {
+.prev {
 	position: absolute;
 	top: 50%;
+	left: 0;
 	display: block;
 	width: 40px;
 	height: 40px;
@@ -112,12 +113,11 @@ a {
 	&:hover, &:focus, &:active {
 		background-color: #999;
 	}
-	&.prev {
-		left: 0;
-	}
-	&.next {
-		right: 0;
-	}
+}
+.next {
+	@extend .prev;
+	left: auto;
+	right: 0;
 }
 .modal-bg {
 	position: absolute;
