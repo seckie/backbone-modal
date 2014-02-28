@@ -60,8 +60,8 @@ $.Modal = Backbone.View.extend({
 		// element - box
 		if (typeof this.id === 'string') { // id mode
 			this.$el = $('#' + this.id).hide();
-			this.$boxBody = this.$el.find('.' + opt.boxBodyClassName);
-			this.$dismiss = this.$el.find('.' + opt.dismissClassName);
+			this.$boxBody = this.$('.' + opt.boxBodyClassName);
+			this.$dismiss = this.$('.' + opt.dismissClassName);
 		} else if (typeof opt.url === 'string') { // url mode
 			this.$el = new Backbone.View({
 				tagName: this.tagName,
@@ -103,7 +103,7 @@ $.Modal = Backbone.View.extend({
 			opt = this.options,
 			url = url || opt.url,
 			startCallback = this.action.openStart.call(this); // action
-		if (typeof startCallback.promise === 'function') {
+		if (startCallback && typeof startCallback.promise === 'function') {
 			startCallback.done(_.bind(main, this));
 		} else {
 			main.call(this);
@@ -140,7 +140,7 @@ $.Modal = Backbone.View.extend({
 	close: function (e) { // public function
 		var opt = this.options,
 			startCallback = this.action.closeStart.call(this); // action
-		if (typeof startCallback.promise === 'function') {
+		if (startCallback && typeof startCallback.promise === 'function') {
 			startCallback.done(_.bind(main, this));
 		} else {
 			main.call(this);
