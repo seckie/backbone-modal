@@ -49,10 +49,7 @@ $.ModalInnerLink = $.Modal.extend({
 				if (this.$bg) {
 					this._adjustBgSize();
 				}
-				this.showBox(1).done(function () {
-					self._showBoxBody();
-					self.action.openInsideComplete.call(self); // action
-				});
+				this.showBox(1).done(_.bind(self.action.openInsideComplete, self));
 				if (opt.resumeScrollPosition) {
 					$(window).scrollTop(this.initialScrollTop);
 				}

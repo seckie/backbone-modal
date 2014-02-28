@@ -71,7 +71,7 @@ $.Modal = Backbone.View.extend({
 		}
 		this.$body = $(opt.bodyEl);
 
-		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', 'showBox', '_hideBoxBody', '_showBoxBody', 'showBg', '_adjustBgSize');
+		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', 'showBox', 'showBg', '_adjustBgSize');
 		this._setupEvents();
 		this.action.initComplete.call(this); // action
 		this.render(options);
@@ -123,10 +123,7 @@ $.Modal = Backbone.View.extend({
 				body = body.replace(/<body[^>]*>\n?/, '');
 				this.$boxBody.html(body);
 			}
-			this.showBox().done(function () {
-				self._showBoxBody();
-				self.action.openComplete.call(self); // action
-			});
+			this.showBox().done(_.bind(self.action.openComplete, self));
 			this.showBg();
 		}
 	},
@@ -144,7 +141,9 @@ $.Modal = Backbone.View.extend({
 
 		function main () {
 			$(document).off('keydown.' + this.cid); // remove key event
-			this._hideBoxBody();
+			this.$boxBody.css({
+				'visibility': 'hidden'
+			});
 			this.$el.hide();
 			if (opt.resumeScrollPosition) {
 				$(window).scrollTop(this.initialScrollTop);
@@ -153,12 +152,18 @@ $.Modal = Backbone.View.extend({
 		}
 	},
 	showBox: function (transition) {
-		var winH = $(window).height(),
+		var self = this,
+			winH = $(window).height(),
 			bodyH = this.$body.outerHeight(),
 			boxH = this.$el.outerHeight(), 
 			scrollTop = $(window).scrollTop(),
 			dfd = $.Deferred(),
-			posTop;
+			posTop,
+			show = function () {
+				self.$boxBody.css({
+					'visibility': 'visible'
+				});
+			};
 		if (winH < scrollTop && bodyH < scrollTop) {
 			// prevent too much increase of height
 		} else {
@@ -176,24 +181,18 @@ $.Modal = Backbone.View.extend({
 		if (transition) {
 			this.$el.show().animate({
 				'top': posTop
-			}, dfd.resolve);
+			}, function () {
+				show();
+				dfd.resolve();
+			});
 		} else {
 			this.$el.css({
 				'top': posTop
 			}).show();
+			show();
 			dfd.resolve();
 		}
 		return dfd.promise();
-	},
-	_hideBoxBody: function () {
-		this.$boxBody.css({
-			'visibility': 'hidden'
-		});
-	},
-	_showBoxBody: function () {
-		this.$boxBody.css({
-			'visibility': 'visible'
-		});
 	},
 	showBg: function () {
 		var dfd = $.Deferred();
