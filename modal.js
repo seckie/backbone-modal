@@ -71,7 +71,7 @@ $.Modal = Backbone.View.extend({
 		}
 		this.$body = $(opt.bodyEl);
 
-		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', '_initBox', '_hideBoxBody', '_showBoxBody', '_showBg', '_adjustBgSize', '_getBgWidth', '_getBgHeight');
+		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', '_initBox', '_hideBoxBody', '_showBoxBody', 'showBg', '_adjustBgSize');
 		this._setupEvents();
 		this.action.initComplete.call(this); // action
 		this.render(options);
@@ -127,9 +127,7 @@ $.Modal = Backbone.View.extend({
 				self._showBoxBody();
 				self.action.openComplete.call(self); // action
 			});
-			if (this.$bg) { // if 'bg' option is TRUE
-				this._showBg();
-			}
+			this.showBg();
 		}
 	},
 	close: function (e) { // public function
@@ -151,16 +149,7 @@ $.Modal = Backbone.View.extend({
 			if (opt.resumeScrollPosition) {
 				$(window).scrollTop(this.initialScrollTop);
 			}
-			if (this.options.fadeDuration > 0) {
-				if (this.$bg) {
-					this.$bg.fadeOut(opt.fadeDuration, _.bind(this.action.closeComplete, this)/* action */);
-				}
-			} else {
-				if (this.$bg) {
-					this.$bg.hide();
-				}
-				this.action.closeComplete.call(this);/* action */
-			}
+			this.hideBg().done(_.bind(this.action.closeComplete, this));
 		}
 	},
 	_initBox: function (transition) {
@@ -206,28 +195,45 @@ $.Modal = Backbone.View.extend({
 			'visibility': 'visible'
 		});
 	},
-	_showBg: function () {
+	showBg: function () {
+		var dfd = $.Deferred();
+		if (!this.$bg) {
+			dfd.resolve();
+			return dfd.promise(); // skip
+		}
 		this._adjustBgSize();
 		if (this.options.fadeDuration > 0) {
-			this.$bg.fadeIn(this.options.fadeDuration);
+			this.$bg.fadeIn(this.options.fadeDuration, dfd.revolve);
 		} else {
 			this.$bg.show();
+			dfd.resolve();
 		}
+		return dfd.promise();
+	},
+	hideBg: function () {
+		var dfd = $.Deferred();
+		if (!this.$bg) {
+			dfd.resolve();
+			return dfd.promise(); // skip
+		}
+		if (this.options.fadeDuration > 0) {
+			this.$bg.fadeOut(this.options.fadeDuration, dfd.resolve);
+		} else {
+			this.$bg.hide();
+			dfd.resolve();
+		}
+		return dfd.promise();
 	},
 	_adjustBgSize: function () {
-		this.$bg.width(this._getBgWidth()).height(this._getBgHeight());
-	},
-	_getBgWidth: function () {
 		var winW = $(window).width(),
+			winH = $(window).height(),
 			bodyW = this.$body.outerWidth(),
-			contentW = this.$el.outerWidth();
-		return _.max([winW, bodyW, contentW]);
-	},
-	_getBgHeight: function () {
-		var winH = $(window).height(),
 			bodyH = this.$body.outerHeight(),
-			contentH = this.$el.outerHeight() + $(window).scrollTop();
-		return _.max([winH, bodyH, contentH]);
+			contentW = this.$el.outerWidth(),
+			contentH = this.$el.outerHeight() + $(window).scrollTop(),
+			bgW = _.max([winW, bodyW, contentW]),
+			bgH = _.max([winH, bodyH, contentH]);
+		this.$bg.width(bgW).height(bgH);
 	}
 });
 
