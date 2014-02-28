@@ -96,7 +96,6 @@ $.Modal = Backbone.View.extend({
 	open: function (url) { // public function
 		var self = this,
 			opt = this.options,
-			url = url || opt.url,
 			startCallback = this.action.openStart.call(this); // action
 		if (startCallback && typeof startCallback.promise === 'function') {
 			startCallback.done(_.bind(main, this));
@@ -106,25 +105,37 @@ $.Modal = Backbone.View.extend({
 
 		function main () {
 			$(document).on('keydown.' + this.cid, this._keyHandler); // add key event
-			if (typeof url === 'string') { // open via URL
-				$.ajax(url, {
-					cache: opt.cache,
-					dataType: 'html',
-					success: _.bind(openModal, this)
-				});
-			} else { // open via id
-				openModal.call(this);
-			}
-		}
-
-		function openModal (res) {
-			if (res) { // open via URL
-				var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
-				body = body.replace(/<body[^>]*>\n?/, '');
-				this.$boxBody.html(body);
-			}
 			this.showBox().done(_.bind(self.action.openComplete, self));
 			this.showBg();
+		}
+	},
+	openURL: function (url) {
+		var self = this,
+			opt = this.options,
+			startCallback = this.action.openStart.call(this); // action
+			
+		if (typeof url != 'string') {
+			return;
+		}
+		if (startCallback && typeof startCallback.promise === 'function') {
+			startCallback.done(_.bind(main, this));
+		} else {
+			main.call(this);
+		}
+		
+		function main () {
+			$(document).on('keydown.' + self.cid, self._keyHandler); // add key event
+			$.ajax(url, {
+				cache: opt.cache,
+				dataType: 'html',
+				success: function (res) {
+					var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
+					body = body.replace(/<body[^>]*>\n?/, '');
+					self.$boxBody.html(body);
+					self.showBox().done(_.bind(self.action.openComplete, self));
+					self.showBg();
+				}
+			});
 		}
 	},
 	close: function (e) { // public function

@@ -10,7 +10,6 @@
 <script src="../js/underscore.js"></script>
 <script src="../js/backbone.js"></script>
 <script src="../modal.js"></script>
-<script src="../plugin/modal-innerlink.js"></script>
 <script>
 $(function () {
 	
@@ -23,13 +22,6 @@ var modal1 = new $.Modal({
 	bodyEl: document.body,
 	fadeDuration: 0,
 	bg: true,
-	action: { // "this" context is modal object
-	}
-});
-
-var modal2 = new $.ModalInnerLink({
-	url: 'modal2.html', // url mode
-	innerLinkEl: '.innerlink',
 	action: {
 		initComplete: function () { },
 		renderComplete: function () { },
@@ -56,17 +48,9 @@ var modal2 = new $.ModalInnerLink({
 	}
 });
 
+
 $('#modal-trigger1').on('click', function (e) {
 	modal1.open();
-	e.preventDefault();
-});
-$('#modal-trigger2').on('click', function (e) {
-	modal2.open();
-	e.preventDefault();
-}).click();
-
-$('#modal-trigger3').on('click', function (e) {
-	modal2.open(this.href);
 	e.preventDefault();
 });
 
@@ -84,9 +68,7 @@ $('#modal-trigger3').on('click', function (e) {
 
 <ul>
 	<li><a href="#" id="modal-trigger1">Open modal box from existing hidden element</a></li>
-	<li><a href="#" id="modal-trigger2">Open modal from URL</a></li>
-	<li><a href="modal4.html" id="modal-trigger3">Open modal from specific URL</a></li></ul>
-	
+</ul>
 <!--/.main--></div>
 <!--/.container--></div>
 

@@ -14,16 +14,15 @@
 <script>
 $(function () {
 	
-var modal2 = new $.ModalInnerLink({
-	//url: 'modal2.html', // url mode
+var modal1 = new $.ModalInnerLink({
 	id: 'modal1',
 	boxBodyClassName: 'modal-body',
 	bgClassName: 'modal-bg',
 	dismissClassName: 'dismiss',
 	bodyEl: document.body,
 	fadeDuration: 0,
-	innerLinkEl: '.innerlink',
 	bg: true,
+	innerLinkEl: '.innerlink',
 	action: {
 		openStart: function () {
 			console.log('open started');
@@ -49,12 +48,12 @@ var modal2 = new $.ModalInnerLink({
 });
 
 $('#modal-trigger2').on('click', function (e) {
-	modal2.open();
+	modal1.openURL('modal2.html');
 	e.preventDefault();
 }).click();
 
 $('#modal-trigger3').on('click', function (e) {
-	modal2.open(this.href);
+	modal1.openURL(this.href);
 	e.preventDefault();
 });
 
