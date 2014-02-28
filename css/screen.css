@@ -31,6 +31,8 @@ a { color: #3399ff; }
 .container { position: relative; min-width: 960px; width: 100%; overflow: hidden; }
 
 .main { width: 960px; margin: 0 auto; padding-bottom: 30px; }
+.main > ul, .main > p { margin-bottom: 1em; }
+.main > ul li { list-style-type: disc; margin-left: 1em; }
 
 .modal-box { position: absolute; z-index: 99; top: 50%; left: 50%; width: 600px; min-height: 400px; overflow: hidden; background-color: #fff; margin: 0 0 0 -300px; -webkit-transition-property: height, -webkit-transform; -moz-transition-property: height, -moz-transform; -o-transition-property: height, -o-transform; transition-property: height, transform; -webkit-transition-duration: 1s; -moz-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; }
 .modal-box .dismiss { display: block; position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; text-align: center; text-decoration: none; background: #3399ff; color: #fff; font-size: 20px; line-height: 20px; }

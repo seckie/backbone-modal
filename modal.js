@@ -44,8 +44,6 @@ $.Modal = Backbone.View.extend({
 			renderComplete: function () {},
 			openStart: function () {},
 			openComplete: function () {},
-			openInsideStart: function () {},
-			openInsideComplete: function () {},
 			closeStart: function () {},
 			closeComplete: function () {}
 		};
@@ -73,12 +71,12 @@ $.Modal = Backbone.View.extend({
 		}
 		this.$body = $(opt.bodyEl);
 
-		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', '_initBox', '_hideBoxBody', '_showBoxBody', '_showBg', '_adjustBgSize', '_getBgWidth', '_getBgHeight', '_openInside');
+		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', '_initBox', '_hideBoxBody', '_showBoxBody', '_showBg', '_adjustBgSize', '_getBgWidth', '_getBgHeight');
 		this._setupEvents();
 		this.action.initComplete.call(this); // action
-		this.render();
+		this.render(options);
 	},
-	render: function () {
+	render: function (options) {
 		this.action.renderComplete.call(this); // action
 	},
 	_setupEvents: function () {
@@ -87,9 +85,6 @@ $.Modal = Backbone.View.extend({
 			this.$bg.on('click.' + this.cid, this.close);
 		}
 		this.$el.on('click.' + this.cid, '.' + opt.dismissClassName, this.close);
-		if (typeof opt.innerLinkEl === 'string') {
-			$(document).on('click.' + this.cid, opt.innerLinkEl, this._openInside);
-		}
 	},
 	// close modal with Esc key
 	_keyHandler: function (e) {
@@ -233,36 +228,6 @@ $.Modal = Backbone.View.extend({
 			bodyH = this.$body.outerHeight(),
 			contentH = this.$el.outerHeight() + $(window).scrollTop();
 		return _.max([winH, bodyH, contentH]);
-	},
-	_openInside: function (e) {
-		var self = this;
-		var url = e.currentTarget.href;
-		var opt = this.options;
-		this.action.openInsideStart.call(this); // action
-		$.ajax(url, {
-			cache: opt.cache,
-			dataType: 'html',
-			success: _.bind(function (res) {
-				if (res) {
-					var body = res.slice(res.search(/<body/), res.search(/<\/body>/));
-					body = body.replace(/<body[^>]*>\n?/, '');
-					this.$boxBody.css('visibility', 'hidden').html(body);
-				}
-				if (this.$bg) {
-					this._adjustBgSize();
-				}
-				this._initBox(1).done(function () {
-					self._showBoxBody();
-					self.action.openInsideComplete.call(self); // action
-				});
-				if (opt.resumeScrollPosition) {
-					$(window).scrollTop(this.initialScrollTop);
-				}
-			}, this)
-		});
-		if (e) {
-			e.preventDefault();
-		}
 	}
 });
 

@@ -6,95 +6,22 @@
 <meta name="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=1024" />
 <link rel="stylesheet" href="css/screen.css" />
-<script src="js/jquery.min.js"></script>
-<script src="js/underscore.js"></script>
-<script src="js/backbone.js"></script>
-<script src="modal.js"></script>
-<script>
-$(function () {
-	
-var modal1 = new $.Modal({
-	id: 'modal1', // id mode
-	cache: true,
-	boxBodyClassName: 'modal-body',
-	bgClassName: 'modal-bg',
-	dismissClassName: 'dismiss',
-	bodyEl: document.body,
-	fadeDuration: 0,
-	bg: true,
-	action: { // "this" context is modal object
-	}
-});
-
-var modal2 = new $.Modal({
-	url: 'modal2.html', // url mode
-	innerLinkEl: '.innerlink',
-	action: {
-		initComplete: function () { },
-		renderComplete: function () { },
-		openStart: function () {
-			console.log('open started');
-		},
-		openComplete: function () {
-			//this.$box.addClass('show');
-		},
-		openInsideStart: function () {
-			//this.$box.addClass('show');
-			console.log('open inside started');
-		},
-		openInsideComplete: function () {
-			//this.$box.removeClass('show');
-			console.log('open inside complete');
-		},
-		closeStart: function () {
-			console.log('close started');
-		},
-		closeComplete: function () {
-			//this.$box.removeClass('show');
-		}
-	}
-});
-
-$('#modal-trigger1').on('click', function (e) {
-	modal1.open();
-	e.preventDefault();
-});
-$('#modal-trigger2').on('click', function (e) {
-	modal2.open();
-	e.preventDefault();
-}).click();
-
-$('#modal-trigger3').on('click', function (e) {
-	modal2.open(this.href);
-	e.preventDefault();
-});
-
-
-});
-</script>
 </head>
 <body>
 
 <div class="container">
 <div class="main">
 	
-<h1>backbone-modal</h1>
-<p><a href="https://github.com/seckie/backbone-modal">source on github</a></p>
+<h1>Demos of backbone-modal</h1>
 
 <ul>
-	<li><a href="#" id="modal-trigger1">Open modal box from existing hidden element</a></li>
-	<li><a href="#" id="modal-trigger2">Open modal from URL</a></li>
-	<li><a href="modal4.html" id="modal-trigger3">Open modal from specific URL</a></li></ul>
-	
+	<li><a href="test/index.html">Toggle Sigle Content</a></li>
+	<li><a href="test/modal-innerlink.html">Multiple Dynamic Contents with Ajax</a></li>
+</ul>
+
+<p><a href="https://github.com/seckie/backbone-modal">source on github</a></p>
 <!--/.main--></div>
 <!--/.container--></div>
 
-<div class="modal-box" id="modal1">
-<div class="modal-body">
-<h1>Modal content1</h1>
-<p>Modal content in existing hidden element with no fading.</p>
-<!--/.modal-body--></div>
-<a href="#" class="dismiss" data-modal-dismiss="modal1">&#215;</a>
-<!--/.modal-box--></div>
 </body>
 </html>

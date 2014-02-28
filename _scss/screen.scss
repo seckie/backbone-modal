@@ -54,6 +54,14 @@ a {
 	width: $slidewidth;
 	margin: 0 auto;
 	padding-bottom: 30px;
+	>ul,
+	>p {
+		margin-bottom: 1em;
+	}
+	>ul li {
+		list-style-type: disc;
+		margin-left: 1em;
+	}
 }
 .modal-box {
 	position: absolute;
