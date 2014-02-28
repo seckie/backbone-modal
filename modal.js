@@ -15,14 +15,12 @@ $.Modal = Backbone.View.extend({
 	className: 'modal-box',
 	options: {
 		content: null,
+		boxBody: '<div class="modal-body"/>',
+		bg: '<div class="modal-bg"/>',
+		dismiss:  '<a href="#" class="dismiss">&#215;</div>',
+		body: 'body',
 		cache: true,
-		boxBodyClassName: 'modal-body',
-		bgClassName: 'modal-bg',
-		innerLinkEl: null,
-		dismissClassName: 'dismiss',
-		bodyEl: document.body,
 		fadeDuration: 750,
-		bg: true,
 		resumeScrollPosition: true,
 		action: { }
 	},
@@ -52,18 +50,15 @@ $.Modal = Backbone.View.extend({
 		};
 		_.extend(this.action, opt.action);
 		// elements
-		this.$body = $(opt.bodyEl);
+		this.$body = $(opt.body);
 		// element - bg
-		if (this.options.bg) {
-			this.$bg = new Backbone.View({
-				className: opt.bgClassName
-			}).$el;
-			this.$body.append(this.$bg);
+		if (opt.bg) {
+			this.$bg = $(opt.bg).appendTo(this.$body);
 		}
 		// element - box
-		this.$content = $(this.options.content);
-		this.$boxBody = $('<div/>', { 'class': opt.boxBodyClassName });
-		this.$dismiss = $('<a/>', { 'class': opt.dismissClassName, href: '#', html: '&#215;' });
+		this.$content = $(opt.content);
+		this.$boxBody = $(opt.boxBody);
+		this.$dismiss = $(opt.dismiss);
 		this.$boxBody.append(this.$content);
 		this.$el.append(this.$boxBody)
 			.append(this.$dismiss)
@@ -84,7 +79,7 @@ $.Modal = Backbone.View.extend({
 		if (this.$bg) {
 			this.$bg.on('click.' + this.cid, this.close);
 		}
-		this.$el.on('click.' + this.cid, '.' + opt.dismissClassName, this.close);
+		this.$dismiss.on('click.'+ this.cid, this.close);
 	},
 	// close modal with Esc key
 	_keyHandler: function (e) {
