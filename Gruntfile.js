@@ -11,10 +11,16 @@ module.exports = function (grunt) {
 				httpPath: '/backbone-modal/',
 				sassDir: '_scss',
 				cssDir: 'css',
-				images_dir: 'img',
-				outputStyle: 'compact',
-				relativeAssets: true,
-				line_comments: false
+				imagesDir: 'img',
+				relativeAssets: true
+			},
+			dev: {
+				options: {
+					environment: "development",
+					outputStyle: 'compact',
+					noLineComments: true,
+					assetCacheBuster: false
+				}
 			}
 		},
 		jshint: {
@@ -47,7 +53,7 @@ module.exports = function (grunt) {
 		watch: {
 			scss: {
 				files: [ '_scss/*.scss' ],
-				tasks: [ 'compass' ]
+				tasks: [ 'compass:dev' ]
 			},
 			js: {
 				files: [ 'modal.js' ],
@@ -56,6 +62,6 @@ module.exports = function (grunt) {
 		}
 	});
 
-	grunt.registerTask('default', [ 'compass', 'watch' ]);
-	grunt.registerTask('deploy', [ 'copy', 'compass' ]);
+	grunt.registerTask('default', [ 'compass:dev', 'watch' ]);
+	grunt.registerTask('deploy', [ 'copy', 'compass:dev' ]);
 };
