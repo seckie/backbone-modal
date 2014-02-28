@@ -14,7 +14,7 @@ $.Modal = Backbone.View.extend({
 	tagName: 'div',
 	className: 'modal-box',
 	options: {
-		url: null,
+		content: null,
 		cache: true,
 		boxBodyClassName: 'modal-body',
 		bgClassName: 'modal-bg',
@@ -28,13 +28,16 @@ $.Modal = Backbone.View.extend({
 	},
 	initialize: function (options) {
 		/**
-		 * <div $body>
+		 * default element structure
+		 * <body $body>
 		 *   <div $box>
-		 *     <div $boxBody> </div>
+		 *     <div $boxBody>
+		 *     <!-- contents here -->
+		 *     </div>
+		 *     <a $dismiss></a>
 		 *   </div>
 		 *   <div $bg> </div>
-		 *   <button $dismiss></button>
-		 * </div>
+		 * </body>
 		 */
 		var opt = this.options;
 		_.extend(this.options, options);
@@ -48,28 +51,25 @@ $.Modal = Backbone.View.extend({
 			closeComplete: function () {}
 		};
 		_.extend(this.action, opt.action);
+		// elements
+		this.$body = $(opt.bodyEl);
 		// element - bg
 		if (this.options.bg) {
 			this.$bg = new Backbone.View({
 				className: opt.bgClassName
 			}).$el;
-			this.$bg.appendTo(document.body);
+			this.$body.append(this.$bg);
 		}
 		// element - box
-		if (typeof this.id === 'string') { // id mode
-			this.$el = $('#' + this.id).hide();
-			this.$boxBody = this.$('.' + opt.boxBodyClassName);
-			this.$dismiss = this.$('.' + opt.dismissClassName);
-		} else if (typeof opt.url === 'string') { // url mode
-			this.$el = new Backbone.View({
-				tagName: this.tagName,
-				className: this.className
-			}).$el;
-			this.$boxBody = $('<div/>', { 'class': opt.boxBodyClassName }).appendTo(this.$el);
-			this.$dismiss = $('<a/>', { 'class': opt.dismissClassName, href: '#', html: '&#215;' }).appendTo(this.$el);
-			this.$el.hide().appendTo(document.body);
-		}
-		this.$body = $(opt.bodyEl);
+		this.$content = $(this.options.content);
+		this.$boxBody = $('<div/>', { 'class': opt.boxBodyClassName });
+		this.$dismiss = $('<a/>', { 'class': opt.dismissClassName, href: '#', html: '&#215;' });
+		this.$boxBody.append(this.$content);
+		this.$el.append(this.$boxBody)
+			.append(this.$dismiss)
+			.hide()
+			.appendTo(this.$body);
+		this.$content.show();
 
 		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', 'showBox', 'showBg', '_adjustBgSize');
 		this._setupEvents();

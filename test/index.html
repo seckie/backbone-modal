@@ -6,6 +6,11 @@
 <meta name="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=1024" />
 <link rel="stylesheet" href="../css/screen.css" />
+<style>
+.modal-content {
+	display: none;
+}
+</style>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/underscore.js"></script>
 <script src="../js/backbone.js"></script>
@@ -14,7 +19,8 @@
 $(function () {
 	
 var modal1 = new $.Modal({
-	id: 'modal1', // id mode
+//	id: 'modal1', // id mode
+	content: '.modal-content',
 	cache: true,
 	boxBodyClassName: 'modal-body',
 	bgClassName: 'modal-bg',
@@ -72,12 +78,18 @@ $('#modal-trigger1').on('click', function (e) {
 <!--/.main--></div>
 <!--/.container--></div>
 
-<div class="modal-box" id="modal1">
-<div class="modal-body">
+<!--<div class="modal-box" id="modal1">-->
+<!--<div class="modal-body">-->
+<!--<h1>Modal content1</h1>-->
+<!--<p>Modal content in existing hidden element with no fading.</p>-->
+<!--|+/.modal-body+|</div>-->
+<!--<a href="#" class="dismiss" data-modal-dismiss="modal1">&#215;</a>-->
+<!--|+/.modal-box+|</div>-->
+
+<div class="modal-content">
 <h1>Modal content1</h1>
 <p>Modal content in existing hidden element with no fading.</p>
-<!--/.modal-body--></div>
-<a href="#" class="dismiss" data-modal-dismiss="modal1">&#215;</a>
-<!--/.modal-box--></div>
+<!--/.modal-content--></div>
+
 </body>
 </html>
