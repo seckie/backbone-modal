@@ -49,7 +49,7 @@ $.ModalInnerLink = $.Modal.extend({
 				if (this.$bg) {
 					this._adjustBgSize();
 				}
-				this._initBox(1).done(function () {
+				this.showBox(1).done(function () {
 					self._showBoxBody();
 					self.action.openInsideComplete.call(self); // action
 				});

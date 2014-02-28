@@ -71,7 +71,7 @@ $.Modal = Backbone.View.extend({
 		}
 		this.$body = $(opt.bodyEl);
 
-		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', '_initBox', '_hideBoxBody', '_showBoxBody', 'showBg', '_adjustBgSize');
+		_.bindAll(this, 'render', '_setupEvents', '_keyHandler', 'open', 'close', 'showBox', '_hideBoxBody', '_showBoxBody', 'showBg', '_adjustBgSize');
 		this._setupEvents();
 		this.action.initComplete.call(this); // action
 		this.render(options);
@@ -123,7 +123,7 @@ $.Modal = Backbone.View.extend({
 				body = body.replace(/<body[^>]*>\n?/, '');
 				this.$boxBody.html(body);
 			}
-			this._initBox().done(function () {
+			this.showBox().done(function () {
 				self._showBoxBody();
 				self.action.openComplete.call(self); // action
 			});
@@ -152,7 +152,7 @@ $.Modal = Backbone.View.extend({
 			this.hideBg().done(_.bind(this.action.closeComplete, this));
 		}
 	},
-	_initBox: function (transition) {
+	showBox: function (transition) {
 		var winH = $(window).height(),
 			bodyH = this.$body.outerHeight(),
 			boxH = this.$el.outerHeight(), 
