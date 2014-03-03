@@ -2,6 +2,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-rename');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.initConfig({
@@ -37,6 +38,12 @@ module.exports = function (grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'bower_components/jquery-1.11.0/',
+						src: [ 'index.js' ],
+						dest: 'js/'
+					},
+					{
+						expand: true,
 						cwd: 'bower_components/underscore/',
 						src: [ 'underscore.js' ],
 						dest: 'js/'
@@ -46,6 +53,16 @@ module.exports = function (grunt) {
 						cwd: 'bower_components/backbone/',
 						src: [ 'backbone.js' ],
 						dest: 'js/'
+					}
+				]
+			}
+		},
+		rename: {
+			main: {
+				files: [
+					{
+						src: [ 'js/index.js' ],
+						dest: 'js/jquery-1.11.0.min.js'
 					}
 				]
 			}
@@ -63,5 +80,5 @@ module.exports = function (grunt) {
 	});
 
 	grunt.registerTask('default', [ 'compass:dev', 'watch' ]);
-	grunt.registerTask('deploy', [ 'copy', 'compass:dev' ]);
+	grunt.registerTask('deploy', [ 'copy', 'rename', 'compass:dev' ]);
 };
