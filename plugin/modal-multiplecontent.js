@@ -14,6 +14,27 @@ if (typeof $.Modal != 'function') {
 }
 
 $.ModalMultipleContent = $.Modal.extend({
+	/**
+	 * Usage: 
+	 *
+	 * var MyCollection = Backbone.Collection.extend({
+	 *   url: './'
+	 * });
+	 * var myCollection = new MyCollection();
+	 * var urls = [
+	 *   'modal5.html',
+	 *   'modal6.html',
+	 *   'modal7.html'
+	 * ];
+	 * _.each(urls, function (url, i) {
+	 *   var myModel = new Backbone.Model({ id: url });
+	 *   collection.add(myModel);
+	 * });
+	 * var modal1 = new $.ModalMultipleContent({
+	 *   collection: myCollection
+	 * });
+	 */
+		
 	render: function (options) {
 		var defaultOptions = {
 				collection: null, // required
@@ -62,7 +83,10 @@ $.ModalMultipleContent = $.Modal.extend({
 			e.preventDefault();
 		}
 	},
-	update: function () {
+	update: function (index) {
+		if (typeof index === 'number') {
+			this.index = index;
+		}
 		if (this.index <= 0) {
 			this.index = 0; // force index
 			this.$prev.hide();

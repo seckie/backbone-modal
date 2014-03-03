@@ -78,6 +78,7 @@ var modal1 = new $.ModalMultipleContent({
 });
 
 $('#modal-trigger').on('click', function (e) {
+	modal1.update(0);
 	modal1.openURL(this.href);
 	e.preventDefault();
 }).click();
