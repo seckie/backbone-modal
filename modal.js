@@ -17,7 +17,7 @@ $.Modal = Backbone.View.extend({
 		content: null,
 		boxBody: '<div class="modal-body"/>',
 		bg: '<div class="modal-bg"/>',
-		dismiss:  '<a href="#" class="dismiss">&#215;</div>',
+		dismiss:  '<a href="#" class="dismiss">&#215;</a>',
 		body: 'body',
 		cache: true,
 		fadeDuration: 750,
