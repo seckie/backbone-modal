@@ -1,5 +1,6 @@
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
+  grunt.loadNpmTasks('grunt-coffeelint')
   grunt.loadNpmTasks('grunt-contrib-compass')
   grunt.loadNpmTasks('grunt-contrib-jshint')
   grunt.loadNpmTasks('grunt-contrib-copy')
@@ -14,6 +15,16 @@ module.exports = (grunt) ->
           bare: true
         files:
           'dist/modal.js': '_coffee/*.coffee'
+    coffeelint:
+      # DOC: https://github.com/vojtajina/grunt-coffeelint
+      # DOC: http://www.coffeelint.org/
+      # app: [ '_coffee/*.coffee' ],
+      main:
+        files:
+          src: [ '_coffee/*.coffee' ]
+        options:
+          'no_trailing_whitespace':
+            'level': 'error'
     compass:
       options:
         httpPath: '/backbone-modal/'
@@ -27,8 +38,6 @@ module.exports = (grunt) ->
           outputStyle: 'compact'
           noLineComments: true
           assetCacheBuster: false
-    jshint:
-      main: [ 'dist/modal.js' ]
     copy:
       main:
         files: [
@@ -69,6 +78,9 @@ module.exports = (grunt) ->
       coffee:
         files: [ '_coffee/*.coffee' ]
         tasks: [ 'coffee' ]
+      coffeelint:
+        files: [ '_coffee/*.coffee' ]
+        tasks: [ 'coffeelint' ]
       scss:
         files: [ '_scss/*.scss' ]
         tasks: [ 'compass:dev' ]
