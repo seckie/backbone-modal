@@ -10,7 +10,8 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
     coffee:
       main:
-        options: {}
+        options:
+          bare: true
         files:
           'dist/modal.js': '_coffee/*.coffee'
     compass:
@@ -27,7 +28,7 @@ module.exports = (grunt) ->
           noLineComments: true
           assetCacheBuster: false
     jshint:
-      main: [ 'modal.js' ]
+      main: [ 'dist/modal.js' ]
     copy:
       main:
         files: [
@@ -72,7 +73,7 @@ module.exports = (grunt) ->
         files: [ '_scss/*.scss' ]
         tasks: [ 'compass:dev' ]
       js:
-        files: [ 'modal.js' ]
+        files: [ 'dist/modal.js' ]
         tasks: [ 'jshint' ]
   )
 
