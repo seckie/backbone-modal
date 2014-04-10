@@ -12,7 +12,7 @@ module.exports = (grunt) ->
       main:
         options: {}
         files:
-          'modal.js': '_coffee/*.coffee'
+          'dist/modal.js': '_coffee/*.coffee'
     compass:
       options:
         httpPath: '/backbone-modal/'
