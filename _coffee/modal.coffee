@@ -6,6 +6,7 @@
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @requires   jQuery.js, Underscore.js, Backbone.js
 ###
+'use strict'
 
 (($, _, Backbone, window, document) ->
 
@@ -22,6 +23,7 @@
       cache: true
       fadeDuration: 750
       resumeScrollPosition: true
+      transition: true
       action: { }
     initialize: (options) ->
       ###
@@ -94,7 +96,7 @@
       startCallback = @action.openStart.call(this)
       main = ->
         $(document).on('keydown.' + @cid, @_keyHandler) # add key event
-        @showBox().done(_.bind(self.action.openComplete, self))
+        @showBox(opt.transition).done(_.bind(self.action.openComplete, self))
         @showBg()
         null
 
@@ -117,7 +119,7 @@
             body = res.slice(res.search(/<body/), res.search(/<\/body>/))
             body = body.replace(/<body[^>]*>\n?/, '')
             self.$boxBody.html(body)
-            self.showBox().done(_.bind(self.action.openComplete, self))
+            self.showBox(opt.transition).done(_.bind(self.action.openComplete, self))
             self.showBg()
             null
         )
@@ -175,7 +177,7 @@
         # large box height
         posTop = @initialScrollTop
 
-      if transition?
+      if transition == true
         @$el.show().animate(
           'top': posTop,->
             show()

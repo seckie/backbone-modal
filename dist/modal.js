@@ -7,6 +7,7 @@
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @requires   jQuery.js, Underscore.js, Backbone.js
  */
+'use strict';
 (function($, _, Backbone, window, document) {
   $.Modal = Backbone.View.extend({
     id: null,
@@ -21,6 +22,7 @@
       cache: true,
       fadeDuration: 750,
       resumeScrollPosition: true,
+      transition: true,
       action: {}
     },
     initialize: function(options) {
@@ -93,7 +95,7 @@
       startCallback = this.action.openStart.call(this);
       main = function() {
         $(document).on('keydown.' + this.cid, this._keyHandler);
-        this.showBox().done(_.bind(self.action.openComplete, self));
+        this.showBox(opt.transition).done(_.bind(self.action.openComplete, self));
         this.showBg();
         return null;
       };
@@ -119,7 +121,7 @@
             body = res.slice(res.search(/<body/), res.search(/<\/body>/));
             body = body.replace(/<body[^>]*>\n?/, '');
             self.$boxBody.html(body);
-            self.showBox().done(_.bind(self.action.openComplete, self));
+            self.showBox(opt.transition).done(_.bind(self.action.openComplete, self));
             self.showBg();
             return null;
           }
@@ -184,7 +186,7 @@
       } else {
         posTop = this.initialScrollTop;
       }
-      if (transition != null) {
+      if (transition === true) {
         this.$el.show().animate({
           'top': posTop
         }, function() {

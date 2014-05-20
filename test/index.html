@@ -19,7 +19,7 @@
 $(function () {
 	
 var modal1 = new $.Modal({
-	content: '.modal-content',
+	content: '#modal-content1',
 	cache: true,
 	fadeDuration: 0,
 	action: {
@@ -47,10 +47,19 @@ var modal1 = new $.Modal({
 		}
 	}
 });
+var modal2 = new $.Modal({
+	content: '#modal-content2',
+	transition: false
+});
 
 
 $('#modal-trigger1').on('click', function (e) {
 	modal1.open();
+	e.preventDefault();
+});
+
+$('#modal-trigger2').on('click', function (e) {
+	modal2.open();
 	e.preventDefault();
 });
 
@@ -68,6 +77,7 @@ $('#modal-trigger1').on('click', function (e) {
 
 <ul>
 	<li><a href="#" id="modal-trigger1">Open modal box from existing hidden element</a></li>
+	<li><a href="#" id="modal-trigger2">Open modal box from existing hidden element <em>without transition</em></a></li>
 </ul>
 <!--/.main--></div>
 <!--/.container--></div>
@@ -80,8 +90,13 @@ $('#modal-trigger1').on('click', function (e) {
 <!--<a href="#" class="dismiss" data-modal-dismiss="modal1">&#215;</a>-->
 <!--|+/.modal-box+|</div>-->
 
-<div class="modal-content">
+<div class="modal-content" id="modal-content1">
 <h1>Modal content1</h1>
+<p>Modal content in existing hidden element with no fading.</p>
+<!--/.modal-content--></div>
+
+<div class="modal-content" id="modal-content2">
+<h1>Modal content2</h1>
 <p>Modal content in existing hidden element with no fading.</p>
 <!--/.modal-content--></div>
 
