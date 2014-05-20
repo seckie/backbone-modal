@@ -38,6 +38,11 @@ module.exports = (grunt) ->
           outputStyle: 'compact'
           noLineComments: true
           assetCacheBuster: false
+    jshint:
+      main:
+        options:
+          jshintrc: true
+        src: [ 'dist/modal.js' ]
     copy:
       main:
         files: [
